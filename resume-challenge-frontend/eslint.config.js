@@ -9,7 +9,7 @@ export default defineConfig([
   globalIgnores(["dist"]),
   {
     rules: {
-      semi: "error",
+      semi: ["error", "never"],
       "prefer-const": "error",
     },
     files: ["**/*.{ts,tsx}"],

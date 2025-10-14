@@ -50,7 +50,7 @@ This approach allows me to stay organized, iterate weekly, and treat the challen
 ```
 cloud-resume-challenge/
 │
-├── README.md                # 🧭 Summary (this file)
+├── README.md                # Summary (this file)
 │
 ├── frontend/
 │   ├── README.md            # Frontend setup, deployment steps

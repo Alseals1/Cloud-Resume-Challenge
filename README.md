@@ -1,4 +1,4 @@
-# The Cloud Resume Challenge — Summary
+# The Cloud Resume Challenge
 
 This repository documents my journey through **The Cloud Resume Challenge** by [Forrest Brazeal](https://cloudresumechallenge.dev/). The challenge is designed to help aspiring Cloud Engineers build hands on cloud skills while showcasing a real-world, full-stack cloud project.
 

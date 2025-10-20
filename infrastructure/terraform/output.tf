@@ -17,3 +17,13 @@ output "website_url" {
   description = "Full website URL"
   value       = "https://${aws_cloudfront_distribution.resume_distribution.domain_name}"
 }
+
+output "route53_name_servers" {
+  description = "Route 53 name servers"
+  value       = aws_route53_zone.main.name_servers
+}
+
+output "hosted_zone_id" {
+  description = "Route 53 hosted zone ID"
+  value       = aws_route53_zone.main.zone_id
+}

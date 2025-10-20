@@ -111,3 +111,62 @@ resource "aws_s3_bucket_policy" "resume_bucket_policy" {
     ]
   })
 }
+
+
+# Route 53 Hosted Zone
+resource "aws_route53_zone" "main" {
+  name = var.domain_name
+
+  tags = {
+    Name = "${var.project_name} Hosted Zone"
+  }
+}
+
+resource "aws_route53_record" "website_a" {
+  zone_id = aws_route53_zone.main.zone_id
+  name    = var.domain_name
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.resume_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.resume_distribution.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+# Route 53 AAAA Record - IPv6 support
+resource "aws_route53_record" "website_aaaa" {
+  zone_id = aws_route53_zone.main.zone_id
+  name    = var.domain_name
+  type    = "AAAA"
+
+  alias {
+    name                   = aws_cloudfront_distribution.resume_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.resume_distribution.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "website_www_a" {
+  zone_id = aws_route53_zone.main.zone_id
+  name    = "www.${var.domain_name}"
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.resume_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.resume_distribution.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "website_www_aaaa" {
+  zone_id = aws_route53_zone.main.zone_id
+  name    = "www.${var.domain_name}"
+  type    = "AAAA"
+
+  alias {
+    name                   = aws_cloudfront_distribution.resume_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.resume_distribution.hosted_zone_id
+    evaluate_target_health = false
+  }
+}

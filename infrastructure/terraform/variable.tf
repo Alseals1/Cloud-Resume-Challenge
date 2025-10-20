@@ -21,3 +21,9 @@ variable "project_name" {
   type        = string
   default     = "Cloud-Resume-Challenge"
 }
+
+variable "domain_name" {
+  description = "The domain name for Route53 record"
+  type        = string
+  default     = "alandis.org"
+}

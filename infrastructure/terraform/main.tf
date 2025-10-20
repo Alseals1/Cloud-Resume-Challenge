@@ -44,7 +44,9 @@ resource "aws_cloudfront_distribution" "resume_distribution" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
-  price_class         = "PriceClass_100" # Use only North America & Europe edge locations (cheapest)
+  price_class         = "PriceClass_100" 
+
+   aliases = [var.domain_name, "www.${var.domain_name}"]
 
   origin {
     domain_name              = aws_s3_bucket.resume_bucket.bucket_regional_domain_name

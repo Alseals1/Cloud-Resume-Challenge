@@ -56,7 +56,7 @@ cloud-resume-challenge/
 │   ├── README.md            # Frontend setup, deployment steps
 │   └── ...                  # Source files for the website
 │
-├── backend/
+├── infratrucre/
 │   ├── README.md            # Backend API setup, Lambda & DB integration
 │   └── ...                  # Source code and infrastructure templates
 │

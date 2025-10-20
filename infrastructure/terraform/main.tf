@@ -44,7 +44,11 @@ resource "aws_cloudfront_distribution" "resume_distribution" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
-  price_class         = "PriceClass_100" # Use only North America & Europe edge locations (cheapest)
+  price_class         = "PriceClass_100"
+
+  aliases = [var.domain_name, "www.${var.domain_name}"]
+
+
 
   origin {
     domain_name              = aws_s3_bucket.resume_bucket.bucket_regional_domain_name
@@ -79,8 +83,13 @@ resource "aws_cloudfront_distribution" "resume_distribution" {
 
   viewer_certificate {
     cloudfront_default_certificate = true
+    acm_certificate_arn            = aws_acm_certificate.resume_cert.arn
+    ssl_support_method             = "sni-only"
+    minimum_protocol_version       = "TLSv1.2_2021"
 
   }
+
+  depends_on = [aws_acm_certificate.resume_cert]
 
   tags = {
     Name = "Resume CloudFront Distribution"
@@ -168,5 +177,37 @@ resource "aws_route53_record" "website_www_aaaa" {
     name                   = aws_cloudfront_distribution.resume_distribution.domain_name
     zone_id                = aws_cloudfront_distribution.resume_distribution.hosted_zone_id
     evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "resume_cert_validation" {
+  for_each = {
+    for dvo in aws_acm_certificate.resume_cert.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+
+  allow_overwrite = true
+  zone_id         = aws_route53_zone.main.zone_id
+  name            = each.value.name
+  type            = each.value.type
+  ttl             = 60
+  records         = [each.value.record]
+}
+
+
+# ACM Certificate 
+resource "aws_acm_certificate" "resume_cert" {
+  provider          = aws.us_east_1
+  domain_name       = var.domain_name
+  validation_method = "DNS"
+
+  subject_alternative_names = ["www.${var.domain_name}"]
+
+
+  lifecycle {
+    create_before_destroy = true
   }
 }

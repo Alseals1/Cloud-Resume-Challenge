@@ -51,8 +51,8 @@ The infrastructure implements a serverless architecture with the following AWS s
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd <repository-name>/infrastructure/terraform
+git clone <This repo>
+cd cloud-Resume-Challenge/infrastructure/terraform
 ```
 
 ### 2. Initialize Terraform

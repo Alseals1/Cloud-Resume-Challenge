@@ -36,7 +36,7 @@ This approach allows me to stay organized, iterate weekly, and treat the challen
 
 **Infrastructure as Code**
 
-- Terraform, AWS CloudFormation, _or_ SAM (I have to choose which one I want to go with)
+- Terraform
 - Version controlled via Git
 
 **Automation**

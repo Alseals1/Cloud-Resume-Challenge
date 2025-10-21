@@ -26,8 +26,8 @@ function Projects() {
             Edfarm Spaces (AI Agent Platform)
           </h3>
           <p className="text-gray-700 mt-1">
-            An intelligent workspace integrating AI agents with real-time
-            collaboration tools for education and research.
+            An intelligent workspace integrating AI agents collaboration tools
+            for education and research.
           </p>
           <ul className="list-disc list-inside text-gray-700 mt-2">
             <li>Frontend: React + TypeScript</li>
@@ -54,8 +54,8 @@ function Projects() {
             Movement Website
           </h3>
           <p className="text-gray-700 mt-1">
-            A modern, content-driven platform built to share community events
-            and media stories.
+            A modern, platform built to share truthful history of Birmingham’s
+            Civil Rights through the storytelling lens of youth justice leaders
           </p>
           <ul className="list-disc list-inside text-gray-700 mt-2">
             <li>Frontend: AstroJS</li>
@@ -68,8 +68,9 @@ function Projects() {
             Movement iOS App
           </h3>
           <p className="text-gray-700 mt-1">
-            A native iOS app designed for community engagement and content
-            sharing.
+            A native iOS app designed built to share truthful history of
+            Birmingham’s Civil Rights through the storytelling lens of youth
+            justice leaders
           </p>
           <ul className="list-disc list-inside text-gray-700 mt-2">
             <li>Frontend: SwiftUI</li>

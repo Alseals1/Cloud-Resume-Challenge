@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "bucket_name" {
   description = "S3 bucket name for hosting the static website"
   type        = string
-  default     = "alandis-cloud-resume-challenge-bucket-2025"
+  default     = "YourBucketName"
 }
 
 variable "environment" {
@@ -25,5 +25,5 @@ variable "project_name" {
 variable "domain_name" {
   description = "The domain name for Route53 record"
   type        = string
-  default     = "alandis.org"
+  default     = "YourDomain.com"
 }

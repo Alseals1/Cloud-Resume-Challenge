@@ -1,6 +1,6 @@
 #DynamoDB
 resource "aws_dynamodb_table" "visit_counter" {
-  name        = "${var.project_name}-visit-counter"
+  name         = "${var.project_name}-visit-counter"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "couter_id"
 

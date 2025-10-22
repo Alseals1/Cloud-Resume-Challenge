@@ -48,19 +48,25 @@ This approach allows me to stay organized, iterate weekly, and treat the challen
 ## Repository Structure
 
 ```
-cloud-resume-challenge/
-│
-├── README.md                # Summary (this file)
-│
-├── frontend/
-│   ├── README.md            # Frontend setup, deployment steps
-│   └── ...                  # Source files for the website
-│
-├── infrastructure/
-│   ├── README.md            # Backend API setup, Lambda & DB integration
-│   └── ...                  # Source code and infrastructure templates
-│
-└── .github/workflows/       # CI/CD automation files
+cloud-resume-challenge
+  .github/workflows/
+    frontend-ci.yaml
+  backend
+    terraform
+      main.tf
+      output.tf
+      provider.tf
+      variable.tf
+    lambda.py
+  frontend
+    infrastructure
+      terraform
+        main.tf
+        output.tf
+        provider.tf
+        variable.tf
+    resume-callenge-frontend
+  
 ```
 
 ---

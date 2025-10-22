@@ -1,0 +1,22 @@
+terraform {
+  required_version = ">= 1.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  alias  = "us_east_1"
+  region = var.aws_region
+  default_tags {
+    tags = {
+      Project     = "Cloud Resume Challenge"
+      Environment = "Production"
+      Managedby   = "Terraform"
+    }
+  }
+}

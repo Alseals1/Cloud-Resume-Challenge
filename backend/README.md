@@ -17,7 +17,7 @@ Browser - API Gateway - Lambda - DynamoDB
 
 ## Architecture Overview
 
-![Architecture Diagram](/frontend//infrastructure/assets/cloudResumeDiagram.png)
+![Architecture Diagram](/frontend/infrastructure/assets/cloudResumeDiagram.png)
 ---
 
 ## File Structure

@@ -57,7 +57,8 @@ cloud-resume-challenge
       output.tf
       provider.tf
       variable.tf
-    lambda.py
+    lambda
+      lambda.py
   frontend
     infrastructure
       terraform

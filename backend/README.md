@@ -9,11 +9,15 @@ This backend powers the **Cloud Resume Challenge** project by handling a visitor
 ### Architecture
 Browser - API Gateway - Lambda - DynamoDB
 
+
 - **DynamoDB** — stores the website visitor count.  
 - **Lambda** — updates and reads the count.  
 - **API Gateway** — exposes an HTTP endpoint for the frontend to call.  
 - **Terraform** — manages and deploys all resources as Infrastructure as Code.
 
+## Architecture Overview
+
+![Architecture Diagram](/frontend//infrastructure/assets/cloudResumeDiagram.png)
 ---
 
 ## File Structure

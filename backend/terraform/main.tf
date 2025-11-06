@@ -73,7 +73,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
 
 resource "aws_iam_role_policy_attachment" "lambda_basic_attach" {
   role       = aws_iam_role.lambda_exec.name
-  policy_arn = data.aws_iam_policy.lambda_basic_execution.arn 
+  policy_arn = data.aws_iam_policy.lambda_basic_execution.arn
 }
 
 data "aws_iam_policy" "lambda_basic_execution" {
@@ -83,13 +83,21 @@ data "aws_iam_policy" "lambda_basic_execution" {
 resource "aws_apigatewayv2_api" "visitor_api" {
   name          = "${var.project_name}-api"
   protocol_type = "HTTP"
+
+  cors_configuration {
+    allow_origins  = ["https://alandis.org", "https://www.alandis.org"]
+    allow_methods  = ["GET", "OPTIONS"]
+    allow_headers  = ["Content-Type", "Authorization"]
+    expose_headers = ["Access-Control-Allow-Origin"]
+    max_age        = 300
+  }
 }
 
 resource "aws_apigatewayv2_integration" "lambda_integration" {
-  api_id           = aws_apigatewayv2_api.visitor_api.id
-  integration_type = "AWS_PROXY"
-  integration_uri  = aws_lambda_function.visitor_counter.invoke_arn
-  integration_method = "POST"
+  api_id                 = aws_apigatewayv2_api.visitor_api.id
+  integration_type       = "AWS_PROXY"
+  integration_uri        = aws_lambda_function.visitor_counter.invoke_arn
+  integration_method     = "POST"
   payload_format_version = "2.0"
 }
 

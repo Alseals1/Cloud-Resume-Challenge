@@ -1,22 +1,21 @@
-import { useEffect, useState } from "react"
 
-declare const process: { env: { API_URL?: string } }
+import { useEffect, useState } from "react"
 
 export default function VisitorCounter() {
   const [visits, setVisits] = useState<number | null>(null)
+   const apiUrl = import.meta.env.VITE_API_URL
 
   useEffect(() => {
-    const apiUrl = process.env.API_URL ?? "/api/visitors"
-    fetch(apiUrl)
+    fetch(`${apiUrl}/dev/visits`)
       .then((res) => res.json())
       .then((data) => setVisits(data.visits))
       .catch((err) => console.error(err))
-  }, [])
+  }, [apiUrl])
 
   return (
     <div className="text-center mt-4">
-      <p className="text-gray-600">Visitor Count:</p>
-      <h2 className="text-2xl font-bold">{visits ?? "Loading..."}</h2>
+      <p className="text-gray-600">Visitor</p>
+      <h2 className="text-2xl font-bold">{visits ?? "Loading..."} </h2>
     </div>
   )
 }

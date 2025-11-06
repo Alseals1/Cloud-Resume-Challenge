@@ -1,12 +1,11 @@
-
 import { useEffect, useState } from "react"
 
 export default function VisitorCounter() {
   const [visits, setVisits] = useState<number | null>(null)
-   const apiUrl = import.meta.env.VITE_API_URL
+  const apiUrl = import.meta.env.VITE_API_URL
 
   useEffect(() => {
-    fetch(`${apiUrl}/dev/visits`)
+    fetch("https://yzspcg64n0.execute-api.us-east-1.amazonaws.com/dev/visits")
       .then((res) => res.json())
       .then((data) => setVisits(data.visits))
       .catch((err) => console.error(err))

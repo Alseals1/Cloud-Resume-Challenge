@@ -120,3 +120,58 @@ resource "aws_lambda_permission" "apigw_lambda" {
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.visitor_api.execution_arn}/*/*"
 }
+
+resource "aws_sns_topic" "lambda_alerts" {
+  name = "${var.project_name}-lambda-alerts"
+}
+
+resource "aws_sns_topic_subscription" "email_alert" {
+  topic_arn = aws_sns_topic.lambda_alerts.arn
+  protocol  = "email"
+  endpoint  = var.alert_email
+}
+resource "aws_cloudwatch_metric_alarm" "lambda_error" {
+  alarm_name          = "${var.project_name}-lambda-error-alarm"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "Errors"
+  namespace           = "AWS/Lambda"
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 0
+  alarm_description   = "This metric monitors Lamdba errors"
+  alarm_actions       = [aws_sns_topic.lambda_alerts.arn]
+  dimensions = {
+    FunctionName = aws_lambda_function.visitor_counter.function_name
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "lambda_duration" {
+  alarm_name          = "${var.project_name}-lambda-duration"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "Duration"
+  namespace           = "AWS/Lambda"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 2000 # milliseconds, adjust as needed
+  alarm_actions       = [aws_sns_topic.lambda_alerts.arn]
+  dimensions = {
+    FunctionName = aws_lambda_function.visitor_counter.function_name
+  }
+}
+
+# 5️⃣ CloudWatch Alarm for Lambda Invocations (spike detection)
+resource "aws_cloudwatch_metric_alarm" "lambda_invocations" {
+  alarm_name          = "${var.project_name}-lambda-invocations"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "Invocations"
+  namespace           = "AWS/Lambda"
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 100 # adjust based on expected traffic
+  alarm_actions       = [aws_sns_topic.lambda_alerts.arn]
+  dimensions = {
+    FunctionName = aws_lambda_function.visitor_counter.function_name
+  }
+}

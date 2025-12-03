@@ -85,7 +85,7 @@ resource "aws_apigatewayv2_api" "visitor_api" {
   protocol_type = "HTTP"
 
   cors_configuration {
-    allow_origins  = ["https://alandis.org", "https://www.alandis.org"]
+    allow_origins  = ["https://alandis.org", "https://www.alandis.org", "http://localhost:5173", ]
     allow_methods  = ["GET", "OPTIONS"]
     allow_headers  = ["Content-Type", "Authorization"]
     expose_headers = ["Access-Control-Allow-Origin"]

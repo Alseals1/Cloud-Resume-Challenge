@@ -16,12 +16,22 @@ def hash_ip(ip):
 
 
 def lambda_handler(event, context):
+    print("EVENT:", json.dumps(event))
     counter_id = 'site_visits'
 
     source_ip = (
-        event.get('requestContext', {})
-        .get('identity', {})
-        .get('sourceIp')
+    event.get("requestContext", {})
+         .get("identity", {})
+         .get("sourceIp")
+    or
+    event.get("requestContext", {})
+         .get("http", {})
+         .get("sourceIp")
+    or
+    event.get("requestContext", {})
+         .get("http", {})
+         .get("headers", {})
+         .get("X-Forwarded-For", "")
     )
 
     hashed_ip = "ip#" + hash_ip(source_ip)

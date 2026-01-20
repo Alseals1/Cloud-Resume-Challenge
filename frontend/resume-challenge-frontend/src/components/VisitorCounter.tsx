@@ -5,10 +5,10 @@ export default function VisitorCounter() {
   const apiUrl = import.meta.env.VITE_API_URL
 
   useEffect(() => {
-    fetch("https://yzspcg64n0.execute-api.us-east-1.amazonaws.com/dev/visits")
+    fetch(apiUrl)
       .then((res) => res.json())
       .then((data) => setVisits(data.visits))
-      .catch((err) => console.error(err))
+      .catch((err) => console.error("Visitor counter error:", err))
   }, [apiUrl])
 
   return (

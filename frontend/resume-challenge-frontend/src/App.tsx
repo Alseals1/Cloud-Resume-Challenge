@@ -7,22 +7,29 @@ import Skills from "./components/Skills"
 import VisitorCounter from "./components/VisitorCounter"
 
 function App() {
-   return (
-    <>
+  return (
     <div className="min-h-screen bg-gray-50 text-gray-800 p-8">
-  <div className="max-w-4xl mx-auto space-y-10 relative">
-    <div className="absolute top-0 right-0">
-      <VisitorCounter />
-    </div>
+      <div className="max-w-4xl mx-auto">
+        {/* Header with visitor counter */}
+        <header className="flex justify-between items-start mb-10">
+          <div className="flex-1" />
+          <VisitorCounter />
+        </header>
 
-    <Info />
-    <About />
-    <Skills />
-    <Projects />
-    <Footer />
-  </div>
-</div>
-    </>
+        {/* Main content */}
+        <main className="space-y-10">
+          <Info />
+          <About />
+          <Skills />
+          <Projects />
+        </main>
+
+        {/* Footer */}
+        <footer className="mt-10">
+          <Footer />
+        </footer>
+      </div>
+    </div>
   )
 }
 

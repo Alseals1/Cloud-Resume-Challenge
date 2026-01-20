@@ -2,7 +2,7 @@ import boto3
 import json
 import os
 import hashlib
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 dynamodb = boto3.resource('dynamodb')
 table_name = os.environ.get('TABLE_NAME', 'Cloud-Resume-Challenge-visit-counter')
@@ -16,67 +16,82 @@ def hash_ip(ip):
 
 
 def lambda_handler(event, context):
-    print("EVENT:", json.dumps(event))
-    counter_id = 'site_visits'
+    try:
+        print("EVENT:", json.dumps(event))
+        counter_id = 'site_visits'
 
-    source_ip = (
-    event.get("requestContext", {})
-         .get("identity", {})
-         .get("sourceIp")
-    or
-    event.get("requestContext", {})
-         .get("http", {})
-         .get("sourceIp")
-    or
-    event.get("requestContext", {})
-         .get("http", {})
-         .get("headers", {})
-         .get("X-Forwarded-For", "")
-    )
+        source_ip = (
+        event.get("requestContext", {})
+             .get("identity", {})
+             .get("sourceIp")
+        or
+        event.get("requestContext", {})
+             .get("http", {})
+             .get("sourceIp")
+        or
+        event.get("requestContext", {})
+             .get("http", {})
+             .get("headers", {})
+             .get("X-Forwarded-For", "")
+        )
 
-    hashed_ip = "ip#" + hash_ip(source_ip)
-    now = datetime.utcnow()
-    cutoff_time = now - timedelta(hours=UNIQUE_WINDOW_HOURS)
+        hashed_ip = "ip#" + hash_ip(source_ip)
+        now = datetime.now(timezone.utc)
+        cutoff_time = now - timedelta(hours=UNIQUE_WINDOW_HOURS)
 
-    resp = table.get_item(Key={'counter_id': hashed_ip})
-    item = resp.get("Item")
-    
-    is_new_unique = True
-    if item and "last_visit" in item:
-        last_time = datetime.fromisoformat(item["last_visit"])
-        if last_time > cutoff_time:
-            is_new_unique = False
-    
-    if is_new_unique:
-        # Update the unique visitor record
-        table.put_item(Item={
-            "counter_id": hashed_ip,
-            "last_visit": now.isoformat()
-        })
+        resp = table.get_item(Key={'counter_id': hashed_ip})
+        item = resp.get("Item")
+        
+        is_new_unique = True
+        if item and "last_visit" in item:
+            last_time = datetime.fromisoformat(item["last_visit"])
+            if last_time > cutoff_time:
+                is_new_unique = False
+        
+        if is_new_unique:
+            # Update the unique visitor record
+            table.put_item(Item={
+                "counter_id": hashed_ip,
+                "last_visit": now.isoformat()
+            })
 
-        total_resp = table.get_item(Key={"counter_id": "total"})
-        current_total = total_resp.get("Item", {}).get("visits", 0)
+            total_resp = table.get_item(Key={"counter_id": "total"})
+            current_total = total_resp.get("Item", {}).get("visits", 0)
 
-        new_total = current_total + 1
+            new_total = current_total + 1
 
-        table.put_item(Item={
-            "counter_id": "total",
-            "visits": new_total
-        })
+            table.put_item(Item={
+                "counter_id": "total",
+                "visits": new_total
+            })
 
-    else:
-        # If not new → just read total
-        total_resp = table.get_item(Key={"counter_id": "total"})
-        new_total = total_resp.get("Item", {}).get("visits", 0)
+        else:
+            # If not new → just read total
+            total_resp = table.get_item(Key={"counter_id": "total"})
+            new_total = total_resp.get("Item", {}).get("visits", 0)
 
-    return {
-        "statusCode": 200,
-        "headers": {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
-        },
-        "body": json.dumps({
-            "visits": int(new_total),
-            "unique": is_new_unique
-        })
-    }
+        return {
+            "statusCode": 200,
+            "headers": {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
+            "body": json.dumps({
+                "visits": int(new_total),
+                "unique": is_new_unique
+            })
+        }
+    except Exception as exception:
+        print(f"Error: {str(exception)}")
+        import traceback
+        traceback.print_exc()
+        return {
+            "statusCode": 500,
+            "headers": {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
+            "body": json.dumps({
+                "error": str(exception)
+            })
+        }
